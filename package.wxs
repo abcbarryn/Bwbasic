@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+    <Package Compressed="yes" Id="BarryN.BWBASIC" Name="BWBASIC"
+           Manufacturer="Barry Nelson" Version="1.0.0">
+
+    <MediaTemplate EmbedCab="yes" />
+
+    <Icon Id="icon.ico" SourceFile="BWBASIC.ICO"/>
+    <Property Id="ARPPRODUCTICON" Value="icon.ico" />
+    <Directory Id="ProgramFiles64Folder">
+        <Directory Id="INSTALLFOLDER" Name="BWBASIC">
+          <Component Id="MainProgram">
+    	    <File Id="BWBASIC.exe" Source="BWBASIC.exe" />
+            <Environment Id="SET_ENV"
+                         Action="set"
+                         Name="PATH"
+                         Part="last"       
+                         Permanent="no" 
+                         System="yes" 
+                         Value="[INSTALLFOLDER]" />
+          </Component>
+          <Component Id="MainProgram_license">
+    	    <File Source="license.txt" />
+          </Component>
+	  <Component Id="BWBASIC_ICO">
+    	    <File Source="BWBASIC.ICO" />
+          </Component>
+        </Directory>
+    </Directory>
+    <Directory Id="ProgramMenuFolder">
+    	<Directory Id="ApplicationProgramsFolder" Name="BWBASIC"/>
+    </Directory>
+    <DirectoryRef Id="ApplicationProgramsFolder">
+    	<Component Id="ApplicationShortcut">
+        	<Shortcut Id="ApplicationStartMenuShortcut"
+                	Name="BWBASIC"
+                	Description="BWBASIC interpreter"
+                	Target="[#BWBASIC.exe]" />
+        	<RemoveFolder Id="CleanUpShortCut" Directory="ApplicationProgramsFolder" On="uninstall"/>
+        	<RegistryValue Root="HKCU" Key="Software\BarryN\BWBASIC" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+    	</Component>
+    </DirectoryRef>
+    <Feature Id="Executable">
+      <ComponentRef Id="MainProgram" />
+      <ComponentRef Id="MainProgram_license" />
+      <ComponentRef Id="ApplicationShortcut" />
+      <ComponentRef Id="BWBASIC_ICO" />
+    </Feature>
+    </Package>
+</Wix>
